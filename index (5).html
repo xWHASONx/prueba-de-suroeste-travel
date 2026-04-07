@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Cotizaciones - Suroeste Travel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div id="login-overlay">
+        <div id="login-box">
+            <img src="https://i.imgur.com/Rnc6C2t.png" alt="Suroeste Travel" class="login-logo">
+            <h2>Acceso Restringido</h2>
+            <p>Introduce la contraseña para generar cotizaciones.</p>
+            <form id="login-form">
+                <input type="password" id="password-input" placeholder="Contraseña" required>
+                <button type="submit">Ingresar</button>
+                <p id="login-error" style="color: #ff6b6b; display: none; margin-top: 15px;">Contraseña incorrecta.</p>
+            </form>
+        </div>
+    </div>
+
+    <div id="loader-overlay"><div class="spinner"></div><p id="loader-text">Generando PDF...</p></div>
+
+    <div class="wrapper">
+        <!-- DASHBOARD DE COTIZACIONES -->
+        <section class="section" id="dashboard-section" style="display: none;">
+            <header class="header"><img src="https://i.imgur.com/Rnc6C2t.png" alt="Suroeste Travel"></header>
+            <div class="dashboard-header">
+                <h2>Mis Cotizaciones</h2>
+                <button id="btn-create-new" class="action-button download">+ Nueva Cotización</button>
+            </div>
+            <div class="dashboard-controls" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                <input type="text" id="search-quote" placeholder="🔍 Buscar por número..." style="flex-grow: 1; padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px;">
+                <select id="filter-status" style="padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; background: white; cursor: pointer;">
+                    <option value="Todos">🚦 Todos los estados</option>
+                    <option value="Pendiente">🟡 Pendientes</option>
+                    <option value="Vendida">🟢 Vendidas</option>
+                    <option value="Rechazada">🔴 Rechazadas</option>
+                </select>
+            </div>
+            <div id="quotes-list" class="quotes-grid"></div>
+        </section>
+
+        <section class="section" id="form-title-section">
+            <header class="header"><img src="https://i.imgur.com/Rnc6C2t.png" alt="Suroeste Travel"></header>
+            <h1 style="margin-top: 30px;">Generador de Cotizaciones</h1>
+            <p class="intro-text">Construye tu cotización añadiendo solo los componentes que necesites.</p>
+        </section>
+
+        <section class="section" id="form-section" style="padding-top: 0;">
+            <form id="pre-reserva-form" novalidate>
+                <fieldset class="form-fieldset">
+                    <legend>1. Datos del Cliente y Viaje</legend>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="asesor">Tu Nombre (Asesor)</label><select id="asesor" required></select></div>
+                        <div class="form-group"><label for="whatsapp-asesor">Tu WhatsApp (sin +)</label><input type="tel" id="whatsapp-asesor" placeholder="Ej: 573216148555" required></div>
+                        <div class="form-group"><label for="adultos">Adultos</label><select id="adultos"></select></div>
+                        <div class="form-group"><label for="jovenes">Jóvenes (12-17)</label><select id="jovenes"></select></div>
+                        <div class="form-group"><label for="ninos">Niños (0-11)</label><select id="ninos"></select></div>
+                        <div class="form-group full-width"><label for="validez-cupos">Validez de la Oferta</label><input type="text" id="validez-cupos" required value="Debido a la alta demanda, los precios varían sin previo aviso por lo que la cotización es válida únicamente por el día de hoy."></div>
+                        <div class="form-group full-width"><label for="cotizacion-numero">Nº Cotización</label><input type="text" id="cotizacion-numero" readonly></div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-fieldset"><legend>2. Componentes de la Cotización</legend>
+                    <div class="add-buttons-container">
+                        <button type="button" class="add-section-btn" data-section="hotel">+ Hotel</button>
+                        <button type="button" class="add-section-btn" data-section="flights">+ Vuelos</button>
+                        <button type="button" class="add-section-btn" data-section="tours">+ Tours</button>
+                        <button type="button" class="add-section-btn" data-section="transfers">+ Traslados</button>
+                        <button type="button" class="add-section-btn" data-section="cruises">+ Crucero</button>
+                    </div>
+                    <div id="dynamic-components-container"></div>
+                </fieldset>
+                
+                <fieldset class="form-fieldset"><legend>3. Detalles Finales y Pagos</legend>
+                    <div class="form-grid">
+                        <div class="form-group full-width"><label for="no-incluye">Qué NO incluye tu viaje</label><textarea id="no-incluye" rows="3">Gastos o servicios no especificados en la cotización.</textarea></div>
+                        
+                        <!-- RESERVA DE GRUPO -->
+                        <div class="form-group full-width" style="background: #f4f6f8; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
+                                <input type="checkbox" id="is-group-booking" style="width: 20px; height: 20px;"> 
+                                <strong>¿Es una reserva de grupo? (Mostrar Total Global al final del PDF)</strong>
+                            </label>
+                        </div>
+                        <div id="group-booking-fields" class="form-grid full-width" style="display: none; background: #e0f7fa; padding: 15px; border-radius: 8px; border: 1px solid #b2ebf2;">
+                            <div class="form-group"><label>Total Global (Ej: $10,500 USD)</label><input type="text" id="global-total"></div>
+                            <div class="form-group"><label>Mensaje Personalizado</label><input type="text" id="global-message" placeholder="Ej: Asegura tu precio enviando copia de los pasaportes"></div>
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <button type="submit" class="submit-button">Generar Cotización</button>
+            </form>
+        </section>
+
+        <!-- AQUI VAN LOS TEMPLATES (MANTENER LOS MISMOS DEL CÓDIGO ORIGINAL) -->
+        <!-- ... (Pega aquí los <template> del código original sin modificaciones) ... -->
+
+        <!-- SECCIÓN DE CONFIRMACIÓN (PDF) -->
+        <div id="confirmation-section" style="display: none;">
+            <div id="voucher-to-print" style="background-color: #fff; position: relative; overflow: hidden;">
+                
+                <!-- HEADER CON BANNER SUROESTE (Placeholder por ahora) -->
+                <header class="confirmation-header" style="padding: 0; background: none; height: auto; display: block; border-bottom: none;">
+                    <!-- NOTA: Reemplazar este src por el banner oficial de Suroeste Travel -->
+                    <img src="https://i.imgur.com/Rnc6C2t.png" alt="Suroeste Travel Banner" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 24px 24px 0 0; background-color: #243168; padding: 20px; box-sizing: border-box;">
+                </header>
+                
+                <div class="voucher-content">
+                    <p class="intro-text" id="confirm-intro-text" style="font-size: 22px; font-weight: 700; color: var(--c-brand-primary); margin-top: 20px;"></p>
+                    
+                    <!-- CONTENEDOR DE LA TARJETA DEL ASESOR -->
+                    <div id="confirm-advisor-card"></div>
+
+                    <div class="customer-data-box" id="confirm-customer-data-box"></div>
+                    
+                    <div id="confirmation-components-container"></div>
+                    
+                    <!-- BARRA DE PAGOS VERDE ESMERALDA (SOLO PARA GRUPOS) -->
+                    <div class="premium-payment-bar" id="group-payment-bar" style="display: none;"></div>
+
+                    <div class="inclusions-box" style="margin-top: 20px;">
+                        <h4>Qué NO incluye tu viaje</h4>
+                        <p id="confirm-no-incluye"></p>
+                    </div>
+                    
+                    <div class="main-cta-container">
+                        <h3>¿Listo para tu próxima aventura?</h3>
+                        <a href="#" target="_blank" class="main-cta-button reserve pdf-link" id="cta-reservar">
+                            <span class="pulse-sticker">¡Reserva Ya!</span>
+                            ¡Sí, Quiero Reservar!
+                        </a>
+                        <a href="#" target="_blank" class="main-cta-button contact pdf-link" id="cta-contactar">Tengo una Pregunta</a>
+                    </div>
+                    
+                    <div id="terms-section-confirm" class="component-section" style="display: none;">
+                        <h3 style="background-color: var(--c-dark);">Términos y Condiciones del Plan</h3>
+                        <div id="confirm-terms-content" class="terms-content-body" style="padding: 0; font-size: 11px; color: #555; text-align: justify;"></div>
+                    </div>
+                </div> <!-- Cierre de voucher-content -->
+                
+                <!-- FOOTER SUROESTE FINAL (Placeholder por ahora) -->
+                <div style="margin-top: 30px; padding: 20px; width: 100%; background-color: var(--c-brand-primary); text-align: center; color: white; border-radius: 0 0 24px 24px; box-sizing: border-box;">
+                    <p style="margin: 0; font-weight: bold;">Suroeste Travel | www.suroestetravel.com | suroestetravel3@gmail.com</p>
+                </div>
+            </div> <!-- Cierre de voucher-to-print -->
+            
+            <!-- BOTONES DE ACCIÓN -->
+            <div class="action-buttons">
+                <button class="action-button download" id="process-quote-btn">Descargar Cotización</button>
+                <button class="action-button edit" id="edit-quote-btn">✏️ Corregir / Editar</button>
+                <button class="action-button secondary" id="new-quote-btn">Nueva Cotización</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+:root {
+    /* === PALETA SUROESTE TRAVEL === */
+    --c-brand-primary: #243168;       
+    --c-brand-dark-accent: #015ce0;   
+    --c-bg-card: #ffffff;             
+    --c-brand-yellow: #015ce0; /* Reemplazado por el azul secundario según requerimiento */
+    
+    /* Neutros */
+    --c-dark-blue: #111111;           
+    --c-dark: #111111;      
+    --c-gray: #666666;      
+    --c-light-gray: #f4f6f8;          
+    --c-white: #ffffff;
+    --c-success-green: #25D366; /* Verde WhatsApp */
+}
+
+body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: var(--c-light-gray); color: var(--c-dark); -webkit-font-smoothing: antialiased; }
+
+.wrapper { max-width: 800px; margin: 40px auto; background-color: var(--c-bg-card); box-shadow: 0 20px 70px rgba(0,0,0,0.1); border-radius: 24px; overflow: hidden; display: none; }
+.header { background-color: var(--c-bg-card); padding: 30px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.header img { max-width: 250px; height: auto; }
+.section { padding: 40px; text-align: center; }
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; margin:0; }
+h1 { font-size: 36px; margin-bottom: 10px; color: var(--c-brand-primary); }
+.intro-text { font-size: 16px; color: var(--c-dark-blue); opacity: 0.8; max-width: 600px; margin: 0 auto 25px auto; }
+
+#form-section { padding-top: 0; }
+form { margin-top: 20px; text-align: left; }
+.form-fieldset { background-color: var(--c-white); border: none; border-radius: 16px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; }
+.form-fieldset legend { font-weight: 700; font-size: 18px; padding: 5px 15px; background-color: var(--c-brand-dark-accent); color: var(--c-white); border-radius: 20px; }
+.sub-fieldset { border: 2px dashed #e9ecef; border-radius: 12px; padding: 20px; margin-top: 15px; position: relative; }
+.sub-fieldset > label { color: var(--c-brand-primary); font-weight: 700; font-size: 15px; margin-bottom: 15px; display: block; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-grid.small-gap { gap: 15px; }
+.form-group { display: flex; flex-direction: column; position: relative; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-group label { font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--c-dark-blue); }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #eee; font-family: 'Poppins', sans-serif; font-size: 15px; box-sizing: border-box; background-color: #f9f9f9; transition: all 0.2s; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--c-brand-primary); box-shadow: 0 0 0 3px rgba(36, 49, 104, 0.2); background-color: #fff; }
+input[readonly] { background-color: #e9ecef; cursor: not-allowed; color: var(--c-gray); }
+.currency-group { display: flex; gap: 10px; }
+.currency-group input { flex-grow: 1; }
+.currency-group select { width: 100px; }
+
+.submit-button { display: inline-block; width: 100%; background-color: var(--c-brand-primary); color: var(--c-white); padding: 16px; border-radius: 12px; font-size: 18px; font-weight: 700; border: none; cursor: pointer; margin-top: 30px; transition: background-color 0.2s; box-shadow: 0 4px 15px rgba(36, 49, 104, 0.4); }
+.submit-button:hover { background-color: var(--c-brand-dark-accent); transform: translateY(-2px); }
+
+.add-buttons-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 25px; padding: 20px; background-color: #f0f2f5; border-radius: 12px; }
+.add-section-btn, .add-subsection-btn { flex-grow: 1; display: block; text-align: center; background-color: var(--c-white); border: 1px solid var(--c-brand-dark-accent); color: var(--c-brand-dark-accent); font-weight: 600; padding: 10px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.add-section-btn:hover, .add-subsection-btn:hover { background-color: var(--c-brand-dark-accent); color: var(--c-white); }
+.add-subsection-btn { grid-column: 1 / -1; margin-top: 10px; border-style: dashed; }
+.remove-section-btn { position: absolute; top: 15px; right: 15px; background-color: #ffeaea; color: #ff4d4f; border: 1px solid #ffccc7; width: 32px; height: 32px; border-radius: 50%; font-size: 20px; line-height: 28px; text-align: center; cursor: pointer; font-weight: bold; transition: all 0.2s; z-index: 10; }
+.remove-section-btn:hover { background-color: #ff4d4f; color: white; transform: rotate(90deg); }
+
+.paste-area { border: 2px dashed #ccc; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; background-color: #fdfdfd; min-height: 100px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; transition: border-color 0.2s; }
+.paste-area:hover { border-color: var(--c-brand-primary); background-color: #f0f8fa; }
+.paste-area p { color: #aaa; font-weight: 500; margin: 0; font-size: 13px; }
+.paste-area img { max-width: 100%; max-height: 150px; border-radius: 8px; object-fit: cover; }
+.gallery-paste-areas { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.gallery-paste-areas .paste-area { min-height: 120px; }
+.gallery-paste-areas img { width: 100%; height: 100%; }
+
+/* DISEÑO DEL PDF */
+#confirmation-section { padding-bottom: 40px; }
+.confirmation-header { background-size: cover; background-position: center; width: 100%; height: 220px; border-radius: 24px 24px 0 0; display: flex; justify-content: center; align-items: center; position: relative; }
+.confirmation-header img { max-width: 280px; height: auto; position: relative; z-index: 2; background-color: rgba(255, 255, 255, 0.85); padding: 15px 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+
+.voucher-content { padding: 30px; text-align: center; }
+
+/* NUEVA TARJETA DE ASESOR SUROESTE TRAVEL */
+.advisor-card-suroeste { display: flex; align-items: center; justify-content: space-between; background-color: #f8f9fa; border-radius: 12px; padding: 15px 25px; margin-bottom: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.02); text-align: left; }
+.advisor-card-suroeste .advisor-info-left { display: flex; align-items: center; gap: 15px; }
+.advisor-card-suroeste img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-brand-primary); }
+.advisor-card-suroeste .text-info p { margin: 0; font-size: 12px; color: var(--c-gray); }
+.advisor-card-suroeste .text-info h4 { margin: 0; font-size: 18px; color: var(--c-brand-primary); font-weight: 700; }
+.advisor-card-suroeste .btn-whatsapp { background-color: var(--c-success-green); color: var(--c-white); padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block; transition: transform 0.2s; }
+.advisor-card-suroeste .btn-whatsapp:hover { transform: scale(1.05); }
+
+.customer-data-box { background-color: #f4f7f9; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+.customer-data-box p { margin: 0 0 8px 0; font-size: 14px; color: var(--c-gray); }
+.customer-data-box strong { color: var(--c-brand-primary); font-weight: 700; font-size: 15px; }
+
+.quote-option-box, .component-section { border: none; border-radius: 16px; margin-top: 25px; overflow: hidden; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background-color: var(--c-white); }
+.option-header, .component-section h3 { background-color: var(--c-brand-primary); color: var(--c-white); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+.option-header h3, .component-section h3 { margin: 0; font-size: 18px; font-weight: 700; color: var(--c-white); }
+.option-price { font-size: 20px; font-weight: 900; background-color: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 8px; }
+.option-body { padding: 25px; }
+.option-body h4 { font-size: 22px; font-weight: 800; margin-bottom: 20px; color: var(--c-brand-primary); }
+
+.photo-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.photo-gallery img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; }
+.single-photo-container img { width: 100%; height: auto; max-height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
+
+.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.data-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+.data-item.full-width { grid-column: 1 / -1; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+.data-item svg { width: 20px; height: 20px; color: var(--c-brand-primary); flex-shrink: 0; margin-top: 2px; }
+.data-item-content strong { display: block; font-size: 12px; color: var(--c-gray); text-transform: uppercase; margin-bottom: 2px; }
+.data-item-content p { margin: 0; font-weight: 600; color: var(--c-dark); }
+
+.cruise-specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+.cruise-spec-item { display: flex; align-items: center; gap: 12px; background: #f4f6f8; padding: 15px; border-radius: 12px; border: 1px solid #e9ecef; }
+.cruise-spec-item svg { width: 24px; height: 24px; color: var(--c-brand-primary); }
+.cruise-spec-item strong { font-size: 12px; color: var(--c-gray); text-transform: uppercase; display: block; margin-bottom: 2px; }
+.cruise-spec-item span { font-size: 14px; font-weight: 700; color: var(--c-dark-blue); }
+
+.premium-payment-bar { background: linear-gradient(135deg, var(--c-brand-primary), var(--c-brand-dark-accent)); color: var(--c-white); border-radius: 16px; padding: 25px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(36, 49, 104, 0.3); text-align: left; flex-wrap: wrap; gap: 15px; }
+.payment-step { flex: 1; min-width: 200px; }
+.payment-step span { display: block; font-size: 14px; text-transform: uppercase; font-weight: 600; opacity: 0.9; margin-bottom: 5px; }
+.payment-step h3 { font-size: 28px; font-weight: 900; margin: 0; color: var(--c-white); }
+
+.inclusions-box { background-color: #f4f6f8; border: 1px solid #eee; padding: 20px; border-radius: 16px; text-align: left; } 
+.inclusions-box h4 { font-size: 16px; color: var(--c-dark-blue); margin-bottom: 10px; font-weight: 800; }
+.inclusions-box p { font-size: 13px; margin: 0 0 8px 0; line-height: 1.5; color: var(--c-gray); white-space: pre-wrap; }
+
+.main-cta-container { text-align: center; padding: 30px; margin-top: 30px; background-color: var(--c-white); border-radius: 16px; border: 1px solid #eee; }
+.main-cta-container h3 { font-size: 22px; margin-bottom: 20px; color: var(--c-dark-blue); }
+.main-cta-button { display: block; text-decoration: none; color: var(--c-white); padding: 15px; border-radius: 50px; font-size: 18px; font-weight: 700; margin-bottom: 10px; transition: transform 0.2s; position: relative; }
+.main-cta-button.reserve { background-color: var(--c-success-green); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+.main-cta-button.reserve:hover { transform: scale(1.02); }
+.main-cta-button.contact { background-color: var(--c-brand-primary); font-size: 15px; padding: 12px; }
+
+.pulse-sticker { position: absolute; top: -15px; right: 10px; background-color: #ff3b30; color: white; font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(255, 59, 48, 0.4); animation: pulse 1.5s infinite; z-index: 10; }
+@keyframes pulse { 0% { transform: scale(1) rotate(5deg); } 50% { transform: scale(1.15) rotate(5deg); } 100% { transform: scale(1) rotate(5deg); } }
+
+.action-buttons { margin-top: 40px; display: flex; gap: 15px; justify-content: center; padding: 0 20px; }
+.action-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 30px; border-radius: 12px; font-size: 18px; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; flex-grow: 1; }
+.action-button.download { background-color: var(--c-brand-primary); color: var(--c-white); box-shadow: 0 4px 15px rgba(36, 49, 104, 0.3); }
+.action-button.download:hover { background-color: var(--c-brand-dark-accent); }
+.action-button.secondary { background-color: var(--c-white); color: var(--c-dark-blue); border: 1px solid #eee; }
+.action-button.edit { background-color: var(--c-dark-blue); color: var(--c-white); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); }
+
+#loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); display: none; justify-content: center; align-items: center; z-index: 1000; flex-direction: column; color: var(--c-brand-primary); font-weight: 700; }
+.spinner { border: 6px solid #eee; border-top: 6px solid var(--c-brand-primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+
+#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c-light-gray); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+#login-box { background-color: var(--c-bg-card); padding: 40px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; }
+.login-logo { max-width: 250px; margin-bottom: 20px; }
+#login-form input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid transparent; background-color: var(--c-light-gray); font-family: 'Poppins', sans-serif; font-size: 16px; text-align: center; margin-bottom: 15px; }
+#login-form button { width: 100%; background-color: var(--c-brand-primary); color: var(--c-white); padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: background-color 0.2s; }
+
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.dashboard-header h2 { color: var(--c-brand-primary); }
+.dashboard-controls { margin-bottom: 20px; }
+.dashboard-controls input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; }
+.quotes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-height: 60vh; overflow-y: auto; padding-right: 10px; }
+.quote-card { background: var(--c-white); border: 1px solid #eee; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer; transition: transform 0.2s, border-color 0.2s; position: relative; }
+.quote-card:hover { transform: translateY(-3px); border-color: var(--c-brand-primary); }
+.quote-card h3 { font-size: 18px; margin-bottom: 5px; color: var(--c-dark-blue); }
+.quote-card p { margin: 0 0 10px 0; font-size: 14px; color: var(--c-gray); }
+.quote-badge { position: absolute; top: 20px; right: 20px; background: #e0f7fa; color: var(--c-brand-primary); padding: 4px 10px; border-radius: 50px; font-size: 12px; font-weight: bold; }
+.quote-date { font-size: 12px; color: #aaa; display: block; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+.btn-duplicate { background: #f4f6f8; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; color: var(--c-dark-blue); margin-top: 10px; width: 100%; transition: background 0.2s; }
+.btn-duplicate:hover { background: #e2e6ea; }
+
+.itinerary-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; text-align: left; }
+.itinerary-table th { background-color: var(--c-brand-primary); color: white; padding: 10px; font-weight: 600; }
+.itinerary-table td { border: 1px solid #eee; padding: 8px; }
+.itinerary-table input { width: 100%; border: none; background: transparent; font-family: inherit; font-size: 13px; padding: 5px; }
+.itinerary-table input:focus { outline: 1px solid var(--c-brand-primary); background: #fff; }
+
+.pdf-itinerary-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+.pdf-itinerary-table th { background-color: #f4f6f8; color: var(--c-dark-blue); padding: 8px; border-bottom: 2px solid var(--c-brand-primary); }
+.pdf-itinerary-table td { padding: 8px; border-bottom: 1px solid #eee; color: var(--c-gray); }
+
+.cabin-card { background: #fdfdfd; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 15px; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.cabin-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.cabin-card-header h5 { margin: 0; font-size: 18px; color: var(--c-brand-primary); }
+.cabin-price-tag { background: var(--c-dark); color: white; padding: 6px 15px; border-radius: 8px; font-weight: 900; font-size: 16px; }
+.cabin-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; }
+.cabin-details p { margin: 0; color: var(--c-gray); }
+.cabin-details strong { color: var(--c-dark-blue); }
+.cabin-inclusions { grid-column: 1 / -1; background: #e0f7fa; padding: 10px 15px; border-radius: 8px; margin-top: 10px; color: var(--c-dark-blue); font-weight: 600; }
+
+.paste-area { position: relative; display: flex; justify-content: center; align-items: center; }
+.remove-img-btn { position: absolute; top: 8px; right: 8px; background: #ff4d4f; color: white; border: 2px solid #fff; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.2s; }
+.remove-img-btn:hover { transform: scale(1.1); background: #d9363e; }
+.loader-spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--c-brand-primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; position: absolute; }
+
+@media (max-width: 768px) {
+    .wrapper { margin: 0; border-radius: 0; }
+    .section, .voucher-content { padding: 20px; }
+    .form-grid, .gallery-paste-areas, .details-section, .details-grid, .cruise-specs-grid { grid-template-columns: 1fr; }
+    .action-buttons { flex-direction: column; }
+    .advisor-card-suroeste { flex-direction: column; text-align: center; gap: 15px; }
+    .advisor-card-suroeste .advisor-info-left { flex-direction: column; }
+    .premium-payment-bar { flex-direction: column; text-align: center; }
+}
