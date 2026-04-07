@@ -3,7 +3,6 @@
     --c-brand-primary: #243168;       
     --c-brand-dark-accent: #015ce0;   
     --c-bg-card: #ffffff;             
-    --c-brand-yellow: #015ce0; /* Reemplazado por el azul secundario según requerimiento */
     
     /* Neutros */
     --c-dark-blue: #111111;           
@@ -17,8 +16,11 @@
 body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: var(--c-light-gray); color: var(--c-dark); -webkit-font-smoothing: antialiased; }
 
 .wrapper { max-width: 800px; margin: 40px auto; background-color: var(--c-bg-card); box-shadow: 0 20px 70px rgba(0,0,0,0.1); border-radius: 24px; overflow: hidden; display: none; }
-.header { background-color: var(--c-bg-card); padding: 30px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+
+/* CORRECCIÓN: Fondo del color principal cada vez que se ponga el logo */
+.header { background-color: var(--c-brand-primary); padding: 20px; text-align: center; border-bottom: none; }
 .header img { max-width: 250px; height: auto; }
+
 .section { padding: 40px; text-align: center; }
 h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; margin:0; }
 h1 { font-size: 36px; margin-bottom: 10px; color: var(--c-brand-primary); }
@@ -62,8 +64,7 @@ input[readonly] { background-color: #e9ecef; cursor: not-allowed; color: var(--c
 
 /* DISEÑO DEL PDF */
 #confirmation-section { padding-bottom: 40px; }
-.confirmation-header { background-size: cover; background-position: center; width: 100%; height: 220px; border-radius: 24px 24px 0 0; display: flex; justify-content: center; align-items: center; position: relative; }
-.confirmation-header img { max-width: 280px; height: auto; position: relative; z-index: 2; background-color: rgba(255, 255, 255, 0.85); padding: 15px 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+.confirmation-header { background-size: cover; background-position: center; width: 100%; height: auto; border-radius: 24px 24px 0 0; display: flex; justify-content: center; align-items: center; position: relative; }
 
 .voucher-content { padding: 30px; text-align: center; }
 
@@ -133,16 +134,20 @@ input[readonly] { background-color: #e9ecef; cursor: not-allowed; color: var(--c
 #loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); display: none; justify-content: center; align-items: center; z-index: 1000; flex-direction: column; color: var(--c-brand-primary); font-weight: 700; }
 .spinner { border: 6px solid #eee; border-top: 6px solid var(--c-brand-primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
 
+/* CORRECCIÓN: Login Box Simétrico y con colores correctos */
 #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c-light-gray); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-#login-box { background-color: var(--c-bg-card); padding: 40px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; }
+#login-box { background-color: var(--c-brand-primary); color: var(--c-white); padding: 40px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; max-width: 400px; width: 90%; box-sizing: border-box; }
 .login-logo { max-width: 250px; margin-bottom: 20px; }
-#login-form input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid transparent; background-color: var(--c-light-gray); font-family: 'Poppins', sans-serif; font-size: 16px; text-align: center; margin-bottom: 15px; }
-#login-form button { width: 100%; background-color: var(--c-brand-primary); color: var(--c-white); padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: background-color 0.2s; }
+#login-box h2 { font-size: 24px; color: var(--c-white); margin-bottom: 10px; }
+#login-box p { color: var(--c-white); opacity: 0.9; margin-bottom: 25px; }
+#login-form input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--c-brand-dark-accent); background-color: var(--c-white); color: var(--c-dark); font-family: 'Poppins', sans-serif; font-size: 16px; text-align: center; margin-bottom: 15px; box-sizing: border-box; }
+#login-form button { width: 100%; background-color: var(--c-brand-dark-accent); color: var(--c-white); padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: background-color 0.2s; box-sizing: border-box; }
+#login-form button:hover { background-color: #014bb8; }
 
 .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .dashboard-header h2 { color: var(--c-brand-primary); }
 .dashboard-controls { margin-bottom: 20px; }
-.dashboard-controls input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; }
+.dashboard-controls input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; box-sizing: border-box; }
 .quotes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-height: 60vh; overflow-y: auto; padding-right: 10px; }
 .quote-card { background: var(--c-white); border: 1px solid #eee; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer; transition: transform 0.2s, border-color 0.2s; position: relative; }
 .quote-card:hover { transform: translateY(-3px); border-color: var(--c-brand-primary); }
@@ -150,13 +155,13 @@ input[readonly] { background-color: #e9ecef; cursor: not-allowed; color: var(--c
 .quote-card p { margin: 0 0 10px 0; font-size: 14px; color: var(--c-gray); }
 .quote-badge { position: absolute; top: 20px; right: 20px; background: #e0f7fa; color: var(--c-brand-primary); padding: 4px 10px; border-radius: 50px; font-size: 12px; font-weight: bold; }
 .quote-date { font-size: 12px; color: #aaa; display: block; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
-.btn-duplicate { background: #f4f6f8; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; color: var(--c-dark-blue); margin-top: 10px; width: 100%; transition: background 0.2s; }
+.btn-duplicate { background: #f4f6f8; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; color: var(--c-dark-blue); margin-top: 10px; width: 100%; transition: background 0.2s; box-sizing: border-box; }
 .btn-duplicate:hover { background: #e2e6ea; }
 
 .itinerary-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; text-align: left; }
 .itinerary-table th { background-color: var(--c-brand-primary); color: white; padding: 10px; font-weight: 600; }
 .itinerary-table td { border: 1px solid #eee; padding: 8px; }
-.itinerary-table input { width: 100%; border: none; background: transparent; font-family: inherit; font-size: 13px; padding: 5px; }
+.itinerary-table input { width: 100%; border: none; background: transparent; font-family: inherit; font-size: 13px; padding: 5px; box-sizing: border-box; }
 .itinerary-table input:focus { outline: 1px solid var(--c-brand-primary); background: #fff; }
 
 .pdf-itinerary-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
