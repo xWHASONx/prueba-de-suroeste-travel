@@ -144,8 +144,28 @@ input[readonly] { background-color: #e9ecef; cursor: not-allowed; color: var(--c
 #login-form button { width: 100%; background-color: var(--c-brand-dark-accent); color: var(--c-white); padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: background-color 0.2s; box-sizing: border-box; }
 #login-form button:hover { background-color: #014bb8; }
 
-.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.dashboard-header h2 { color: var(--c-brand-primary); }
+.dashboard-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 30px; /* Separación del banner superior */
+    margin-bottom: 20px; 
+    flex-wrap: wrap; /* Permite que se adapte en celulares */
+    gap: 15px;
+}
+.dashboard-header h2 { 
+    color: var(--c-brand-primary); 
+    margin: 0;
+}
+
+/* AÑADIR ESTO PARA ARREGLAR EL BOTÓN GIGANTE */
+#btn-create-new {
+    flex-grow: 0 !important; /* Evita que el botón se estire */
+    width: auto !important;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin: 0;
+}
 .dashboard-controls { margin-bottom: 20px; }
 .dashboard-controls input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; box-sizing: border-box; }
 .quotes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-height: 60vh; overflow-y: auto; padding-right: 10px; }
