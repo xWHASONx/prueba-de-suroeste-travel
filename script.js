@@ -7,14 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const ACCESS_PASSWORD = '3054466406*';
 
     // --- CONFIGURACIÓN FIREBASE ---
-    // IMPORTANTE: Reemplaza estos valores con los de tu nuevo proyecto en Firebase
     const firebaseConfig = {
-        apiKey: "TU_NUEVA_API_KEY",
-        authDomain: "tu-nuevo-proyecto.firebaseapp.com",
-        projectId: "tu-nuevo-proyecto",
-        storageBucket: "tu-nuevo-proyecto.firebasestorage.app",
-        messagingSenderId: "TU_SENDER_ID",
-        appId: "TU_APP_ID"
+        apiKey: "AIzaSyDKcIaC0Iok9Qjzt5nunQT3RcE8My8OcbM",
+        authDomain: "suroeste-travel.firebaseapp.com",
+        projectId: "suroeste-travel",
+        storageBucket: "suroeste-travel.firebasestorage.app",
+        messagingSenderId: "1024155836116",
+        appId: "1:1024155836116:web:a87276237fc133d2322541"
     };
     
     let db, storage;
