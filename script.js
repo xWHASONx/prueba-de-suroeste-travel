@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const ACCESS_PASSWORD = 'HOLA';
+    const ACCESS_PASSWORD = '3054466406*';
 
     // --- CONFIGURACIÓN FIREBASE ---
     // IMPORTANTE: Reemplaza estos valores con los de tu nuevo proyecto en Firebase
@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
         cruises: `<p style="margin-bottom: 10px;"><strong>🚢 Cruceros:</strong> La tarifa oficial del crucero es en dólares estadounidenses y el valor dado en pesos es únicamente un estimado ya que el valor real puede variar dependiendo de la tasa de cambio el día del pago. El pago del crucero se realiza directamente a la naviera a través de un link oficial donde se deberá cancelar el valor con tarjeta débito o crédito.</p>`
     };
 
-    const GENERAL_TERMS = `<p style="margin-bottom: 10px;"><strong>Términos y condiciones generales:</strong> Al confirmar una reserva con Suroeste Travel (en adelante, “la Agencia”), el pasajero y/o titular de la reserva (en adelante, “el Cliente”) acepta los presentes términos y condiciones: 1) Rol de la Agencia: La Agencia actúa como intermediaria entre el Cliente y los proveedores de servicios turísticos. Los servicios efectivamente prestados son responsabilidad directa de cada proveedor. 2) Itinerarios, horarios y cambios operativos: Los itinerarios, horarios, rutas, escalas, cabinas, asientos, tipos de habitación, categorías, servicios incluidos y demás características del viaje pueden ser modificados por los proveedores por razones operativas, climáticas, de seguridad, disposiciones gubernamentales o causas de fuerza mayor. La Agencia no se hace responsable por cambios, reprogramaciones, demoras, cancelaciones, overbooking, sustituciones de equipo, cierres de puertos/aeropuertos. 3) Documentación y requisitos de viaje: Es responsabilidad del Cliente contar con documentos vigentes y requisitos exigidos para su viaje: pasaporte, visas, permisos, vacunas, formularios migratorios, seguros, autorizaciones para menores, entre otros. 4) Exactitud de datos: El Cliente debe suministrar datos correctos y completos. Errores o inconsistencias pueden generar costos adicionales. 5) Pagos, confirmación y emisión: Las reservas se confirman únicamente cuando el pago ha sido recibido según lo acordado. 6) Tarifas administrativas y cargos por gestión: Las tarifas administrativas, cargos de gestión y/o cargos por servicio cobrados por la Agencia no son reembolsables. 7) Fuerza mayor y eventos fuera de control: La Agencia no será responsable por incumplimientos o afectaciones derivadas de eventos fuera de su control razonable. 8) Aceptación: La compra, pago o confirmación de la reserva implica aceptación total de estos términos.</p>
-    <p style="margin-bottom: 10px;"><strong>Políticas de Cancelación, Cambios y Reembolsos:</strong> 1) Política general: Todas las solicitudes de cancelación, cambios, reembolsos, reemisiones, cambios de nombre/fecha o correcciones están sujetas a las políticas y condiciones del proveedor y al tipo de tarifa adquirida. 2) Tarifas administrativas no reembolsables: Independientemente del resultado ante el proveedor, las tarifas administrativas de la Agencia no son reembolsables. 3) Penalidades, retenciones y diferencias tarifarias: En caso de que el proveedor permita cambios o reembolsos, el Cliente podrá asumir penalidades por cambio/cancelación, diferencia de tarifa, impuestos no reembolsables. 4) No show (no presentación): Si el Cliente no se presenta a tiempo, aplicarán políticas de no show del proveedor, que suelen implicar pérdida total del valor pagado. 5) Tiempos de reembolso: Cuando un reembolso sea aprobado por el proveedor, los tiempos de devolución dependen del proveedor y/o entidad financiera. La Agencia no controla estos plazos. 6) Cancelaciones o cambios del proveedor: Si el proveedor cancela o modifica el servicio, se aplicarán sus políticas. 7) Recomendación de seguro de viaje: Se recomienda adquirir seguro de asistencia/seguro de cancelación para cubrir imprevistos médicos, interrupciones del viaje o cancelaciones por causas justificadas.</p>`;
+    const GENERAL_TERMS = `<p style="margin-bottom: 10px;"><strong>Términos y condiciones generales:</strong> Al confirmar una reserva con Suroeste Travel (en adelante, “la Agencia”), el pasajero y/o titular de la reserva (en adelante, “el Cliente”) acepta los presentes términos y condiciones: 1) Rol de la Agencia: La Agencia actúa como intermediaria entre el Cliente y los proveedores de servicios turísticos. Los servicios efectivamente prestados son responsabilidad directa de cada proveedor. 2) Itinerarios, horarios y cambios operativos: Los itinerarios, horarios, rutas, escalas, cabinas, asientos, tipos de habitación, categorías, servicios incluidos y demás características del viaje pueden ser modificados por los proveedores por razones operativas, climáticas, de seguridad, disposiciones gubernamentales o causas de fuerza mayor. La Agencia no se hace responsable por cambios, reprogramaciones, demoras, cancelaciones, overbooking, sustituciones de equipo, cierres de puertos/aeropuertos. 3) Documentación y requisitos de viaje: Es responsabilidad del Cliente contar con documentos vigentes y requisitos exigidos para su viaje: pasaporte, visas, permisos, vacunas, formularios migratorios, seguros, autorizaciones para menores, entre otros. 4) Exactitud de datos: El Cliente debe suministrar datos correctos y completos. Errores o inconsistencias pueden generar costos adicionales. 5) Pagos, confirmación y emisión: Las reservas se confirman únicamente cuando el pago ha sido recibido según lo acordado. 6) Tarifas administrativas y cargos por gestión: Las tarifas administrativas, cargos de gestión y/o cargos por servicio cobrados por la Agencia no son reembolsables. 7) Fuerza mayor y eventos fuera de control: La Agencia no será responsable por incumplimientos o afectaciones derivadas de eventos fuera de control razonable. 8) Aceptación: La compra, pago o confirmación de la reserva implica aceptación total de estos términos.</p>
+    <p style="margin-bottom: 10px;"><strong>Políticas de Cancelación, Cambios y Reembolsos:</strong> 1) Política general: Todas las solicitudes de cancelación, cambios, reembolsos, reemisiones, cambios de nombre/fecha o correcciones están sujetas a las políticas y condiciones del proveedor y al tipo de tarifa adquirida. 2) Tarifas administrativas no reembolsables: Independientemente del resultado ante el proveedor, las tarifas administrativas de la Agencia no son reembolsables. 3) Penalidades, retenciones y diferencias tarifarias: En caso de que el proveedor permite cambios o reembolsos, el Cliente podrá asumir penalidades por cambio/cancelación, diferencia de tarifa, impuestos no reembolsables. 4) No show (no presentación): Si el Cliente no se presenta a tiempo, aplicarán políticas de no show del proveedor, que suelen implicar pérdida total del valor pagado. 5) Tiempos de reembolso: Cuando un reembolso sea aprobado por el proveedor, los tiempos de devolución dependen del proveedor y/o entidad financiera. La Agencia no controla estos plazos. 6) Cancelaciones o cambios del proveedor: Si el proveedor cancela o modifica el servicio, se aplicarán sus políticas. 7) Recomendación de seguro de viaje: Se recomienda adquirir seguro de asistencia/seguro de cancelación para cubrir imprevistos médicos, interrupciones del viaje o cancelaciones por causas justificadas.</p>`;
 
     // --- OBTENER TRM OFICIAL ---
     async function fetchTRM() {
@@ -616,7 +616,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            ['flight', 'tour', 'transfer'].forEach(type => {[2, 3].forEach(num => {
+            ['flight', 'tour', 'transfer'].forEach(type => {
+                [2, 3].forEach(num => {
                     if(keys.some(k => k.startsWith(`${type}-${num}-`) && data.formData[k])) {
                         const wrapper = document.getElementById(`${type}-${num}-form-wrapper`);
                         const btn = document.getElementById(`btn-add-${type}-${num}`);
@@ -676,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function formatDate(dateStr) {
         if (!dateStr) return 'N/A';
-        const [year, month, day] = dateStr.split('-');
+        const[year, month, day] = dateStr.split('-');
         const date = new Date(year, month - 1, day);
         return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
     }
@@ -1002,7 +1003,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('terms-section-confirm').style.display = 'block';
         }
 
-        // Asignar links de WhatsApp a los botones finales['cta-reservar', 'cta-contactar'].forEach(id => {
+        // Asignar links de WhatsApp a los botones finales
+        ['cta-reservar', 'cta-contactar'].forEach(id => {
             const el = document.getElementById(id);
             if (el && advisor) {
                 const baseText = id === 'cta-reservar' ? `¡Hola ${advisor.name}! Estoy listo para reservar según la cotización *${quoteNumber}*.` : `Hola ${advisor.name}, tengo una pregunta sobre la cotización *${quoteNumber}*.`;
