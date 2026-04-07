@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const ACCESS_PASSWORD = 'HOLA'; // Puedes cambiarla si lo deseas
+    const ACCESS_PASSWORD = 'HOLAA'; // Puedes cambiarla si lo deseas
 
     // --- CONFIGURACIÓN FIREBASE (SUROESTE TRAVEL) ---
     // IMPORTANTE: Debes llenar estos datos con tu nuevo proyecto de Firebase
