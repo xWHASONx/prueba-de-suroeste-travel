@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/Rnc6C2t.png">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -186,10 +187,11 @@
             </div>
         </template>
 
+        <!-- REEMPLAZAR EL TEMPLATE DE CABINAS EN index.html -->
         <template id="template-cabin">
-            <div class="cabin-wrapper" id="cabin-wrapper-CRUISEID-CABINID" style="border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #fff; position: relative;">
-                <button type="button" class="remove-section-btn remove-cabin-btn" data-target="cabin-wrapper-CRUISEID-CABINID" style="top: 5px; right: 5px; width: 24px; height: 24px; font-size: 14px; line-height: 18px;">&times;</button>
-                <strong style="display:block; margin-bottom: 10px; color: var(--c-brand-primary);">Cabina / Opción CABINID</strong>
+            <div class="cabin-wrapper" id="cabin-wrapper-CRUISEID-CABINID" style="border: 1px solid #e2e8f0; padding: 25px 20px 20px 20px; border-radius: 12px; margin-bottom: 20px; background: #fdfdfd; position: relative; margin-top: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                <button type="button" class="remove-section-btn remove-cabin-btn" data-target="cabin-wrapper-CRUISEID-CABINID" style="position: absolute; top: -12px; right: -12px; width: 30px; height: 30px; font-size: 18px; line-height: 26px; padding: 0; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">&times;</button>
+                <strong style="display:block; margin-bottom: 15px; color: var(--c-brand-primary); font-size: 16px; border-bottom: 2px solid #eee; padding-bottom: 8px;">Cabina / Opción CABINID</strong>
                 <div class="form-grid small-gap">
                     <div class="form-group"><label>Tipo de Cabina</label><select id="tipo-cabina-CRUISEID-CABINID">
                         <option value="Interior">Interior</option>
