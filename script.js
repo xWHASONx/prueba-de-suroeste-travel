@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const ACCESS_PASSWORD = '3054466406*';
+    const ACCESS_PASSWORD = 'HOLA';
 
     // --- CONFIGURACIÓN FIREBASE ---
     const firebaseConfig = {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ADVISORS = {
         'Julio': { 
             name: 'Julio Nieto', 
-            photoUrl: 'https://i.imgur.com/Rnc6C2t.png', /* REEMPLAZA ESTE LINK POR EL DE IMGUR CON LA FOTO DE JULIO */
+            photoUrl: 'https://i.imgur.com/UVWjrb6.jpeg', 
             defaultWhatsapp: '573216148555' 
         }
     };
