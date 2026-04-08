@@ -1015,18 +1015,88 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('edit-quote-btn').addEventListener('click', () => showView('form'));
     document.getElementById('new-quote-btn').addEventListener('click', () => loadDashboard());
     
-    document.getElementById('process-quote-btn').addEventListener('click', async () => {
+    // REEMPLAZA TODO EL EVENTO process-quote-btn AL FINAL DE script.js
+    const processBtn = document.getElementById('process-quote-btn');
+    if (processBtn) {
+        processBtn.addEventListener('click', async () => {
+            document.getElementById('loader-overlay').style.display = 'flex';
+            document.getElementById('loader-text').textContent = "Generando PDF...";
+            
+            try {
+                const elementToPrint = document.getElementById('voucher-to-print');
+                const wrapperEl = document.querySelector('.wrapper');
+                
+                // FIX: Quitar overflow temporalmente para que html2canvas no recorte el PDF
+                const originalWrapperOverflow = wrapperEl ? wrapperEl.style.overflow : '';
+                const originalPrintOverflow = elementToPrint.style.overflow;
+                if (wrapperEl) wrapperEl.style.overflow = 'visible';
+                elementToPrint.style.overflow = 'visible';
+
+                const images = elementToPrint.getElementsByTagName('img');
+                for (let i = 0; i < images.length; i++) {
+                    if (images[i].src.includes('firebasestorage')) {
+                        images[i].setAttribute('crossOrigin', 'anonymous');
+                        images[i].src = images[i].src + (images[i].src.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+                    }
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                const canvas = await html2canvas(elementToPrint, { 
+                    scale: 2, 
+                    useCORS: true,
+                    allowTaint: false,
+                    scrollY: 0, // Forzar renderizado desde arriba
+                    windowHeight: elementToPrint.scrollHeight // Capturar toda la altura real
+                });
+                
+                // Restaurar overflow original
+                if (wrapperEl) wrapperEl.style.overflow = originalWrapperOverflow;
+                elementToPrint.style.overflow = originalPrintOverflow;
+                
+                const pdf = new window.jspdf.jsPDF({ orientation: 'p', unit: 'px', format:[canvas.width, canvas.height] });
+                pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, canvas.width, canvas.height);
+                
+                const scaleFactor = canvas.width / elementToPrint.offsetWidth;
+                
+                const pdfLinks = elementToPrint.querySelectorAll('.pdf-link');
+                pdfLinks.forEach(element => {
+                    if (!element.href) return;
+                    const rect = element.getBoundingClientRect();
+                    const containerRect = elementToPrint.getBoundingClientRect();
+                    pdf.link(
+                        (rect.left - containerRect.left) * scaleFactor,
+                        (rect.top - containerRect.top) * scaleFactor,
+                        rect.width * scaleFactor,
+                        rect.height * scaleFactor,
+                        { url: element.href }
+                    );
+                });
+
+                pdf.save(`${document.getElementById('cotizacion-numero').value}.pdf`);
+            } catch (error) { 
+                console.error("Error generando PDF:", error);
+                alert("Error generando PDF. Revisa la consola para más detalles."); 
+            } finally { 
+                document.getElementById('loader-overlay').style.display = 'none'; 
+            }
+        });
+    }
         document.getElementById('loader-overlay').style.display = 'flex';
         document.getElementById('loader-text').textContent = "Generando PDF...";
         
         try {
             const elementToPrint = document.getElementById('voucher-to-print');
-            
-            const images = elementToPrint.getElementsByTagName('img');
-            for (let i = 0; i < images.length; i++) {
-                if (images[i].src.includes('firebasestorage')) {
-                    images[i].setAttribute('crossOrigin', 'anonymous');
-                    images[i].src = images[i].src + (images[i].src.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+            if (elementToPrint) {
+                const headerEl = elementToPrint.querySelector('.confirmation-header');
+                if (headerEl) {
+                    headerEl.style.padding = '30px 20px';
+                    headerEl.style.backgroundColor = 'var(--c-brand-primary)';
+                    headerEl.style.borderRadius = '24px 24px 0 0';
+                    headerEl.style.display = 'flex';
+                    headerEl.style.justifyContent = 'center';
+                    headerEl.style.alignItems = 'center';
+                    headerEl.innerHTML = `<img src="https://i.imgur.com/Rnc6C2t.png" alt="Suroeste Travel" style="max-width: 250px; height: auto; display: block;">`;
                 }
             }
 
