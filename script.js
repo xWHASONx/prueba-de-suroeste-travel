@@ -54,10 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const advisorWhatsappInput = document.getElementById('whatsapp-asesor');
 
     const ADVISORS = {
-        'Daniela': { 
-            name: 'Daniela Cardona', 
-            photoUrl: 'https://i.imgur.com/Rnc6C2t.png', 
-            defaultWhatsapp: '573216148555' 
+        'Julio': { 
+            name: 'Julio Nieto', 
+            photoUrl: 'https://i.imgur.com/UVWjrb6.jpeg', 
+            defaultWhatsapp: '573216148555' /* Cambia este número si el WhatsApp de Julio es diferente */
         }
     };
 
