@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const ACCESS_PASSWORD = 'HOLA';
+    const ACCESS_PASSWORD = '3054466406*';
 
     // --- CONFIGURACIÓN FIREBASE ---
     const firebaseConfig = {
@@ -53,11 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const advisorSelect = document.getElementById('asesor');
     const advisorWhatsappInput = document.getElementById('whatsapp-asesor');
 
+    // --- ASESORES ---
     const ADVISORS = {
         'Julio': { 
             name: 'Julio Nieto', 
-            photoUrl: 'https://i.imgur.com/UVWjrb6.jpeg', 
-            defaultWhatsapp: '573216148555' /* Cambia este número si el WhatsApp de Julio es diferente */
+            photoUrl: 'https://i.imgur.com/Rnc6C2t.png', /* REEMPLAZA ESTE LINK POR EL DE IMGUR CON LA FOTO DE JULIO */
+            defaultWhatsapp: '573216148555' 
         }
     };
 
@@ -149,33 +150,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- LÓGICA DE LOGIN ---
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (passwordInput.value.trim() === ACCESS_PASSWORD) {
-            loginOverlay.style.display = 'none';
-            mainWrapper.style.display = 'block';
-            await fetchTRM();
-            loadDashboard();
-        } else {
-            document.getElementById('login-error').style.display = 'block';
-            passwordInput.value = '';
-        }
-    });
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (passwordInput.value.trim() === ACCESS_PASSWORD) {
+                loginOverlay.style.display = 'none';
+                mainWrapper.style.display = 'block';
+                await fetchTRM();
+                loadDashboard();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+                passwordInput.value = '';
+            }
+        });
+    }
 
     // --- DASHBOARD Y FIREBASE ---
     function showView(view) {
-        dashboardSection.style.display = view === 'dashboard' ? 'block' : 'none';
-        formTitleSection.style.display = view === 'form' ? 'block' : 'none';
-        formSection.style.display = view === 'form' ? 'block' : 'none';
-        confirmationSection.style.display = view === 'pdf' ? 'block' : 'none';
+        if(dashboardSection) dashboardSection.style.display = view === 'dashboard' ? 'block' : 'none';
+        if(formTitleSection) formTitleSection.style.display = view === 'form' ? 'block' : 'none';
+        if(formSection) formSection.style.display = view === 'form' ? 'block' : 'none';
+        if(confirmationSection) confirmationSection.style.display = view === 'pdf' ? 'block' : 'none';
         window.scrollTo(0, 0);
     }
 
     async function loadDashboard() {
         showView('dashboard');
-        quotesList.innerHTML = '<p>Cargando cotizaciones...</p>';
+        if(quotesList) quotesList.innerHTML = '<p>Cargando cotizaciones...</p>';
         if (!db) {
-            quotesList.innerHTML = '<p style="color:red;">⚠️ Firebase no configurado. Configura las credenciales en el código.</p>';
+            if(quotesList) quotesList.innerHTML = '<p style="color:red;">⚠️ Firebase no configurado. Configura las credenciales en el código.</p>';
             return;
         }
         try {
@@ -184,8 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
             renderQuotes(allDocs);
             
             const filterData = () => {
-                const term = searchQuoteInput.value.toLowerCase();
-                const status = document.getElementById('filter-status').value;
+                const term = searchQuoteInput ? searchQuoteInput.value.toLowerCase() : '';
+                const statusEl = document.getElementById('filter-status');
+                const status = statusEl ? statusEl.value : 'Todos';
                 
                 const filtered = allDocs.filter(doc => {
                     const data = doc.data();
@@ -196,15 +200,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderQuotes(filtered);
             };
 
-            searchQuoteInput.addEventListener('input', filterData);
-            document.getElementById('filter-status').addEventListener('change', filterData);
+            if(searchQuoteInput) searchQuoteInput.addEventListener('input', filterData);
+            const filterStatusEl = document.getElementById('filter-status');
+            if(filterStatusEl) filterStatusEl.addEventListener('change', filterData);
         } catch (error) {
-            quotesList.innerHTML = '<p style="color:red;">Error al cargar datos. Por favor, desactiva tu bloqueador de anuncios o revisa Firebase.</p>';
+            if(quotesList) quotesList.innerHTML = '<p style="color:red;">Error al cargar datos. Por favor, desactiva tu bloqueador de anuncios o revisa Firebase.</p>';
             console.error(error);
         }
     }
 
     function renderQuotes(docs) {
+        if(!quotesList) return;
         quotesList.innerHTML = '';
         if (docs.length === 0) { quotesList.innerHTML = '<p>No hay cotizaciones que coincidan.</p>'; return; }
         
@@ -271,11 +277,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    btnCreateNew.addEventListener('click', () => {
-        currentQuoteId = null;
-        initializeForm();
-        showView('form');
-    });
+    if(btnCreateNew) {
+        btnCreateNew.addEventListener('click', () => {
+            currentQuoteId = null;
+            initializeForm();
+            showView('form');
+        });
+    }
 
     function generateQuoteNumber() {
         const now = new Date();
@@ -298,23 +306,28 @@ document.addEventListener('DOMContentLoaded', () => {
         tempDiv.innerHTML = cloneHtml;
         const cloneNode = tempDiv.firstElementChild;
 
-        dynamicComponentsContainer.appendChild(cloneNode);
+        if(dynamicComponentsContainer) dynamicComponentsContainer.appendChild(cloneNode);
 
         if (sectionKey === 'hotel') {
             populateSelect(`cantidad-noches-${counter}`, 1, 30, 4, 'noche');
             populateSelect(`cantidad-habitaciones-${counter}`, 1, 10, 1, 'habitación', 'habitaciones');
-            if (counter === 1) document.querySelector(`.add-section-btn[data-section="hotel"]`).style.display = 'none';
-            if (counter > 1) document.querySelector(`#hotel-form-wrapper-${counter - 1} .add-subsection-btn`).style.display = 'none';
+            const btn = document.querySelector(`.add-section-btn[data-section="hotel"]`);
+            if (counter === 1 && btn) btn.style.display = 'none';
+            const subBtn = document.querySelector(`#hotel-form-wrapper-${counter - 1} .add-subsection-btn`);
+            if (counter > 1 && subBtn) subBtn.style.display = 'none';
         }
         
         if (sectionKey === 'cruises') {
             populateSelect(`noches-crucero-${counter}`, 1, 30, 7, 'noche');
-            if (counter === 1) document.querySelector(`.add-section-btn[data-section="cruises"]`).style.display = 'none';
-            if (counter > 1) document.querySelector(`#cruises-form-wrapper-${counter - 1} .add-subsection-btn`).style.display = 'none';
+            const btn = document.querySelector(`.add-section-btn[data-section="cruises"]`);
+            if (counter === 1 && btn) btn.style.display = 'none';
+            const subBtn = document.querySelector(`#cruises-form-wrapper-${counter - 1} .add-subsection-btn`);
+            if (counter > 1 && subBtn) subBtn.style.display = 'none';
         }
 
         if (['flights', 'tours', 'transfers'].includes(sectionKey)) {
-            document.querySelector(`.add-section-btn[data-section="${sectionKey}"]`).style.display = 'none';
+            const btn = document.querySelector(`.add-section-btn[data-section="${sectionKey}"]`);
+            if(btn) btn.style.display = 'none';
         }
 
         addEventListenersToSection(cloneNode);
@@ -338,140 +351,145 @@ document.addEventListener('DOMContentLoaded', () => {
             if (wrapper) wrapper.remove();
             
             if (document.querySelectorAll(`.${type}-form-wrapper`).length === 0) {
-                document.querySelector(`.add-section-btn[data-section="${type === 'hotel' ? 'hotel' : 'cruises'}"]`).style.display = 'block';
+                const btn = document.querySelector(`.add-section-btn[data-section="${type === 'hotel' ? 'hotel' : 'cruises'}"]`);
+                if(btn) btn.style.display = 'block';
                 if(type === 'hotel') hotelCounter = 0;
                 if(type === 'cruises') cruiseCounter = 0;
             } else {
                 const lastItem = Array.from(document.querySelectorAll(`.${type}-form-wrapper`)).pop();
-                lastItem.querySelector('.add-subsection-btn').style.display = 'block';
+                if(lastItem) {
+                    const subBtn = lastItem.querySelector('.add-subsection-btn');
+                    if(subBtn) subBtn.style.display = 'block';
+                }
             }
         } else {
             const wrapper = document.getElementById(`${sectionKey}-form-wrapper`);
             if (wrapper) {
                 wrapper.remove();
-                document.querySelector(`.add-section-btn[data-section="${sectionKey}"]`).style.display = 'block';
+                const btn = document.querySelector(`.add-section-btn[data-section="${sectionKey}"]`);
+                if(btn) btn.style.display = 'block';
             }
         }
     }
 
-    form.addEventListener('click', e => {
-        const { target } = e;
-        const { section, subsection } = target.dataset;
-        
-        if (target.matches('.add-section-btn')) addSection(section);
+    if(form) {
+        form.addEventListener('click', e => {
+            const { target } = e;
+            const { section, subsection } = target.dataset;
+            
+            if (target.matches('.add-section-btn')) addSection(section);
 
-        if (target.matches('.remove-img-btn')) {
-            e.preventDefault();
-            e.stopPropagation();
-            const pasteArea = target.closest('.paste-area');
-            const imageId = pasteArea.dataset.imgId;
-            const imgElement = pasteArea.querySelector('img');
-            const placeholder = pasteArea.querySelector('.paste-placeholder');
-            
-            delete pastedImages[imageId];
-            
-            imgElement.src = '';
-            imgElement.style.display = 'none';
-            target.style.display = 'none';
-            if(placeholder) placeholder.style.display = 'block';
-        }
-        
-        if (target.matches('.remove-section-btn') && !target.matches('.remove-cabin-btn')) {
-            if (target.dataset.subsection) {
-                const wrapper = document.getElementById(`${target.dataset.subsection}-form-wrapper`);
-                if(wrapper) { 
-                    wrapper.style.display = 'none'; 
-                    const btnAdd = document.getElementById(`btn-add-${target.dataset.subsection}`);
-                    if(btnAdd) btnAdd.style.display = 'block';
+            if (target.matches('.remove-img-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const pasteArea = target.closest('.paste-area');
+                if(!pasteArea) return;
+                const imageId = pasteArea.dataset.imgId;
+                const imgElement = pasteArea.querySelector('img');
+                const placeholder = pasteArea.querySelector('p');
+                
+                delete pastedImages[imageId];
+                
+                if(imgElement) {
+                    imgElement.src = '';
+                    imgElement.style.display = 'none';
                 }
-            } else {
-                removeSection(section);
+                target.style.display = 'none';
+                if(placeholder) placeholder.style.display = 'block';
             }
-        }
-        
-        if (target.matches('.add-subsection-btn') && !target.matches('.add-cabin-btn')) {
-            if(section === 'hotel' || section === 'cruises') addSection(section);
-            else {
-                const wrapper = document.getElementById(`${subsection}-form-wrapper`);
-                if(wrapper) { 
-                    wrapper.style.display = 'block'; 
-                    target.style.display = 'none'; 
-                    if(subsection.endsWith('-2')) {
-                        const btnAdd3 = document.getElementById(`btn-add-${subsection.replace('-2', '-3')}`);
-                        if(btnAdd3) btnAdd3.style.display = 'block';
+            
+            if (target.matches('.remove-section-btn') && !target.matches('.remove-cabin-btn')) {
+                if (target.dataset.subsection) {
+                    const wrapper = document.getElementById(`${target.dataset.subsection}-form-wrapper`);
+                    if(wrapper) { 
+                        wrapper.style.display = 'none'; 
+                        const btnAdd = document.getElementById(`btn-add-${target.dataset.subsection}`);
+                        if(btnAdd) btnAdd.style.display = 'block';
+                    }
+                } else {
+                    removeSection(section);
+                }
+            }
+            
+            if (target.matches('.add-subsection-btn') && !target.matches('.add-cabin-btn')) {
+                if(section === 'hotel' || section === 'cruises') addSection(section);
+                else {
+                    const wrapper = document.getElementById(`${subsection}-form-wrapper`);
+                    if(wrapper) { 
+                        wrapper.style.display = 'block'; 
+                        target.style.display = 'none'; 
+                        if(subsection.endsWith('-2')) {
+                            const btnAdd3 = document.getElementById(`btn-add-${subsection.replace('-2', '-3')}`);
+                            if(btnAdd3) btnAdd3.style.display = 'block';
+                        }
                     }
                 }
             }
-        }
 
-        if (target.matches('.add-cabin-btn')) {
-            addCabinToCruise(target.dataset.cruise);
-        }
-        if (target.matches('.remove-cabin-btn')) {
-            const targetId = target.dataset.target;
-            const el = document.getElementById(targetId);
-            if (el) el.remove();
-        }
-        if (target.matches('.generate-itinerary-btn')) {
-            generateItineraryTable(target.dataset.target);
-        }
-    });
+            if (target.matches('.add-cabin-btn')) {
+                addCabinToCruise(target.dataset.cruise);
+            }
+            if (target.matches('.remove-cabin-btn')) {
+                const targetId = target.dataset.target;
+                const el = document.getElementById(targetId);
+                if (el) el.remove();
+            }
+            if (target.matches('.generate-itinerary-btn')) {
+                generateItineraryTable(target.dataset.target);
+            }
+        });
+    }
 
-    document.getElementById('is-group-booking').addEventListener('change', (e) => {
-        document.getElementById('group-booking-fields').style.display = e.target.checked ? 'grid' : 'none';
-    });
-
-    form.addEventListener('click', e => {
-        if (e.target.matches('.remove-img-btn')) {
-            e.preventDefault();
-            e.stopPropagation();
-            const pasteArea = e.target.closest('.paste-area');
-            const imageId = pasteArea.dataset.imgId;
-            const imgElement = pasteArea.querySelector('img');
-            const pTag = pasteArea.querySelector('p'); 
-            
-            delete pastedImages[imageId];
-            
-            imgElement.src = '';
-            imgElement.style.display = 'none';
-            e.target.style.display = 'none';
-            if(pTag) pTag.style.display = 'block'; 
-        }
-    });
+    const isGroupBookingEl = document.getElementById('is-group-booking');
+    if(isGroupBookingEl) {
+        isGroupBookingEl.addEventListener('change', (e) => {
+            const fields = document.getElementById('group-booking-fields');
+            if(fields) fields.style.display = e.target.checked ? 'grid' : 'none';
+        });
+    }
 
     function addEventListenersToSection(sectionElement) {
         sectionElement.querySelectorAll('.paste-area').forEach(area => area.addEventListener('paste', handlePaste));
     }
 
     function initializeForm() {
+        if(!form) return;
         form.reset();
         pastedImages = {};
         hotelCounter = 0;
         cruiseCounter = 0;
-        dynamicComponentsContainer.innerHTML = '';
+        if(dynamicComponentsContainer) dynamicComponentsContainer.innerHTML = '';
         document.querySelectorAll('.add-section-btn').forEach(btn => btn.style.display = 'block');
-        document.getElementById('group-booking-fields').style.display = 'none';
+        const groupFields = document.getElementById('group-booking-fields');
+        if(groupFields) groupFields.style.display = 'none';
         
-        advisorSelect.innerHTML = '<option value="" disabled selected>Selecciona tu nombre</option>' + Object.keys(ADVISORS).map(id => `<option value="${id}">${ADVISORS[id].name}</option>`).join('');
+        if(advisorSelect) {
+            advisorSelect.innerHTML = '<option value="" disabled selected>Selecciona tu nombre</option>' + Object.keys(ADVISORS).map(id => `<option value="${id}">${ADVISORS[id].name}</option>`).join('');
+        }
         
         populateSelect('adultos', 1, 20, 2, 'Adulto');
         populateSelect('jovenes', 0, 10, 0, 'Joven', 'Jóvenes');
         populateSelect('ninos', 0, 10, 0, 'Niño');
         
-        document.getElementById('cotizacion-numero').value = generateQuoteNumber();
+        const cotNumEl = document.getElementById('cotizacion-numero');
+        if(cotNumEl) cotNumEl.value = generateQuoteNumber();
     }
 
-    advisorSelect.addEventListener('change', () => {
-        const selectedAdvisor = ADVISORS[advisorSelect.value];
-        if (selectedAdvisor) advisorWhatsappInput.value = selectedAdvisor.defaultWhatsapp;
-    });
+    if(advisorSelect) {
+        advisorSelect.addEventListener('change', () => {
+            const selectedAdvisor = ADVISORS[advisorSelect.value];
+            if (selectedAdvisor && advisorWhatsappInput) advisorWhatsappInput.value = selectedAdvisor.defaultWhatsapp;
+        });
+    }
 
     // --- LÓGICA DE SUB-MÓDULOS (CABINAS E ITINERARIO) ---
     function addCabinToCruise(cruiseId) {
         const container = document.getElementById(`cabins-container-${cruiseId}`);
         if (!container) return;
         const cabinCount = container.children.length + 1;
-        const template = document.getElementById('template-cabin').innerHTML;
+        const templateEl = document.getElementById('template-cabin');
+        if(!templateEl) return;
+        const template = templateEl.innerHTML;
         const html = template.replace(/CRUISEID/g, cruiseId).replace(/CABINID/g, cabinCount);
         
         const tempDiv = document.createElement('div');
@@ -505,57 +523,63 @@ document.addEventListener('DOMContentLoaded', () => {
             startDate.setDate(startDate.getDate() + 1);
         }
         html += '</table>';
-        document.getElementById(`itinerary-container-${cruiseId}`).innerHTML = html;
+        const container = document.getElementById(`itinerary-container-${cruiseId}`);
+        if(container) container.innerHTML = html;
     }
 
     // --- GUARDAR EN FIREBASE ---
-    form.addEventListener('submit', async e => { 
-        e.preventDefault(); 
-        if (!form.checkValidity()) { form.reportValidity(); return; }
-        if (dynamicComponentsContainer.children.length === 0) { alert('Añade al menos un componente.'); return; }
-        
-        const quoteData = {
-            quoteNumber: document.getElementById('cotizacion-numero').value,
-            advisorId: advisorSelect.value,
-            advisorName: ADVISORS[advisorSelect.value].name,
-            status: 'Pendiente', 
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            formData: serializeForm(form),
-            images: pastedImages
-        };
-
-        const payloadSize = JSON.stringify(quoteData).length;
-        if (payloadSize > 1000000) {
-            alert("⚠️ La cotización tiene demasiadas imágenes o son muy pesadas. Por favor, elimina algunas fotos e intenta de nuevo.");
-            return;
-        }
-
-        try {
-            document.getElementById('loader-overlay').style.display = 'flex';
-            document.getElementById('loader-text').textContent = "Guardando en la nube...";
+    if(form) {
+        form.addEventListener('submit', async e => { 
+            e.preventDefault(); 
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+            if (dynamicComponentsContainer && dynamicComponentsContainer.children.length === 0) { alert('Añade al menos un componente.'); return; }
             
-            if (db) {
-                if (currentQuoteId) {
-                    delete quoteData.createdAt; 
-                    delete quoteData.status; 
-                    await db.collection('cotizaciones').doc(currentQuoteId).update(quoteData);
-                } else {
-                    const docRef = await db.collection('cotizaciones').add(quoteData);
-                    currentQuoteId = docRef.id;
-                }
-            } else {
-                console.warn("Firebase no configurado. Saltando guardado en la nube.");
+            const quoteData = {
+                quoteNumber: document.getElementById('cotizacion-numero')?.value || '',
+                advisorId: advisorSelect?.value || '',
+                advisorName: advisorSelect?.value ? ADVISORS[advisorSelect.value].name : '',
+                status: 'Pendiente', 
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                formData: serializeForm(form),
+                images: pastedImages
+            };
+
+            const payloadSize = JSON.stringify(quoteData).length;
+            if (payloadSize > 1000000) {
+                alert("⚠️ La cotización tiene demasiadas imágenes o son muy pesadas. Por favor, elimina algunas fotos e intenta de nuevo.");
+                return;
             }
-            
-            populateQuote(); 
-            showView('pdf');
-        } catch (error) {
-            console.error("Error guardando:", error);
-            alert("Hubo un error guardando la cotización. Revisa tu conexión.");
-        } finally {
-            document.getElementById('loader-overlay').style.display = 'none';
-        }
-    });
+
+            try {
+                const loader = document.getElementById('loader-overlay');
+                const loaderText = document.getElementById('loader-text');
+                if(loader) loader.style.display = 'flex';
+                if(loaderText) loaderText.textContent = "Guardando en la nube...";
+                
+                if (db) {
+                    if (currentQuoteId) {
+                        delete quoteData.createdAt; 
+                        delete quoteData.status; 
+                        await db.collection('cotizaciones').doc(currentQuoteId).update(quoteData);
+                    } else {
+                        const docRef = await db.collection('cotizaciones').add(quoteData);
+                        currentQuoteId = docRef.id;
+                    }
+                } else {
+                    console.warn("Firebase no configurado. Saltando guardado en la nube.");
+                }
+                
+                populateQuote(); 
+                showView('pdf');
+            } catch (error) {
+                console.error("Error guardando:", error);
+                alert("Hubo un error guardando la cotización. Revisa tu conexión.");
+            } finally {
+                const loader = document.getElementById('loader-overlay');
+                if(loader) loader.style.display = 'none';
+            }
+        });
+    }
 
     function serializeForm(formNode) {
         const obj = {};
@@ -597,7 +621,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(el.type === 'checkbox') {
                         el.checked = data.formData[key];
                         if(key === 'is-group-booking') {
-                            document.getElementById('group-booking-fields').style.display = el.checked ? 'grid' : 'none';
+                            const groupFields = document.getElementById('group-booking-fields');
+                            if(groupFields) groupFields.style.display = el.checked ? 'grid' : 'none';
                         }
                     } else {
                         el.value = data.formData[key];
@@ -635,15 +660,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const pasteArea = document.querySelector(`[data-img-id="${imgId}"]`);
                 if(pasteArea) {
                     const imgEl = pasteArea.querySelector('img');
-                    const pTag = pasteArea.querySelector('.paste-placeholder');
+                    const pTag = pasteArea.querySelector('p');
                     const removeBtn = pasteArea.querySelector('.remove-img-btn');
 
-                    imgEl.setAttribute('crossOrigin', 'anonymous');
-                    let imgSrc = pastedImages[imgId];
-                    imgSrc = imgSrc + (imgSrc.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
-                    
-                    imgEl.src = imgSrc;
-                    imgEl.style.display = 'block';
+                    if(imgEl) {
+                        imgEl.setAttribute('crossOrigin', 'anonymous');
+                        let imgSrc = pastedImages[imgId];
+                        imgSrc = imgSrc + (imgSrc.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+                        imgEl.src = imgSrc;
+                        imgEl.style.display = 'block';
+                    }
                     if(pTag) pTag.style.display = 'none';
                     if(removeBtn) removeBtn.style.display = 'flex';
                 }
@@ -708,8 +734,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        const advisor = ADVISORS[advisorSelect.value];
-        const whatsappLink = `https://wa.me/${advisorWhatsappInput.value}`;
+        const advisor = advisorSelect?.value ? ADVISORS[advisorSelect.value] : null;
+        const whatsappLink = advisorWhatsappInput ? `https://wa.me/${advisorWhatsappInput.value}` : '#';
         
         // INYECTAR TARJETA DEL ASESOR
         const advisorCardContainer = document.getElementById('confirm-advisor-card');
@@ -731,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        confirmationComponentsContainer.innerHTML = '';
+        if(confirmationComponentsContainer) confirmationComponentsContainer.innerHTML = '';
         let dynamicTermsHTML = '';
 
         // 1. RENDERIZAR HOTELES
@@ -750,21 +776,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const moneda = document.getElementById(`moneda-${num}`)?.value || 'COP';
             const hotelName = document.getElementById(`hotel-${num}`)?.value || '';
 
-            confirmationComponentsContainer.innerHTML += `
-                <div class="quote-option-box">
-                    <div class="option-header"><h3>Hotel ${index + 1}</h3><span class="option-price">${formatCurrency(valor, moneda)}</span></div>
-                    <div class="option-body">
-                        <h4>${hotelName}</h4>
-                        <div class="photo-gallery">${galleryHTML}</div>
-                        <div class="details-grid">
-                            <div class="data-item">${ICONS.destination}<div class="data-item-content"><strong>Destino:</strong><p>${destino}</p></div></div>
-                            <div class="data-item">${ICONS.calendar}<div class="data-item-content"><strong>Fechas:</strong><p>${formatDate(fecha)}</p></div></div>
-                            <div class="data-item">${ICONS.moon}<div class="data-item-content"><strong>Noches:</strong><p>${nochesEl ? nochesEl.options[nochesEl.selectedIndex].text : ''}</p></div></div>
-                            <div class="data-item">${ICONS.bed}<div class="data-item-content"><strong>Habitaciones:</strong><p>${habsEl ? habsEl.options[habsEl.selectedIndex].text : ''}</p></div></div>
-                            <div class="data-item full-width">${ICONS.check}<div class="data-item-content"><strong>Plan Incluye:</strong><p>${REGIMEN_TEMPLATES[regimen] || 'No especificado'}</p></div></div>
+            if(confirmationComponentsContainer) {
+                confirmationComponentsContainer.innerHTML += `
+                    <div class="quote-option-box">
+                        <div class="option-header"><h3>Hotel ${index + 1}</h3><span class="option-price">${formatCurrency(valor, moneda)}</span></div>
+                        <div class="option-body">
+                            <h4>${hotelName}</h4>
+                            <div class="photo-gallery">${galleryHTML}</div>
+                            <div class="details-grid">
+                                <div class="data-item">${ICONS.destination}<div class="data-item-content"><strong>Destino:</strong><p>${destino}</p></div></div>
+                                <div class="data-item">${ICONS.calendar}<div class="data-item-content"><strong>Fechas:</strong><p>${formatDate(fecha)}</p></div></div>
+                                <div class="data-item">${ICONS.moon}<div class="data-item-content"><strong>Noches:</strong><p>${nochesEl ? nochesEl.options[nochesEl.selectedIndex].text : ''}</p></div></div>
+                                <div class="data-item">${ICONS.bed}<div class="data-item-content"><strong>Habitaciones:</strong><p>${habsEl ? habsEl.options[habsEl.selectedIndex].text : ''}</p></div></div>
+                                <div class="data-item full-width">${ICONS.check}<div class="data-item-content"><strong>Plan Incluye:</strong><p>${REGIMEN_TEMPLATES[regimen] || 'No especificado'}</p></div></div>
+                            </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
+            }
         });
 
         // 2. RENDERIZAR CRUCEROS
@@ -852,38 +880,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             });
            
-            confirmationComponentsContainer.innerHTML += `
-                <div class="quote-option-box" style="position: relative;">
-                    <div class="option-header">
-                        <h3 style="margin: 0;">${titulo}</h3>
-                    </div>
-                    <div class="option-body">
-                        
-                        ${logoHTML ? `<div style="text-align: center; margin-bottom: 25px;">${logoHTML}</div>` : ''}
-                        
-                        <div class="cruise-specs-grid">
-                            <div class="cruise-spec-item">${ICONS.ship} <div><strong>Barco:</strong><span>${barco}</span></div></div>
-                            <div class="cruise-spec-item">${ICONS.destination} <div><strong>Puerto de Embarque:</strong><span>${puerto}</span></div></div>
-                            <div class="cruise-spec-item">${ICONS.calendar} <div><strong>Fecha de Embarque:</strong><span>${formatDate(fecha)}</span></div></div>
-                            <div class="cruise-spec-item">${ICONS.moon} <div><strong>Duración:</strong><span>${noches} Noches</span></div></div>
+            if(confirmationComponentsContainer) {
+                confirmationComponentsContainer.innerHTML += `
+                    <div class="quote-option-box" style="position: relative;">
+                        <div class="option-header">
+                            <h3 style="margin: 0;">${titulo}</h3>
                         </div>
+                        <div class="option-body">
+                            
+                            ${logoHTML ? `<div style="text-align: center; margin-bottom: 25px;">${logoHTML}</div>` : ''}
+                            
+                            <div class="cruise-specs-grid">
+                                <div class="cruise-spec-item">${ICONS.ship} <div><strong>Barco:</strong><span>${barco}</span></div></div>
+                                <div class="cruise-spec-item">${ICONS.destination} <div><strong>Puerto de Embarque:</strong><span>${puerto}</span></div></div>
+                                <div class="cruise-spec-item">${ICONS.calendar} <div><strong>Fecha de Embarque:</strong><span>${formatDate(fecha)}</span></div></div>
+                                <div class="cruise-spec-item">${ICONS.moon} <div><strong>Duración:</strong><span>${noches} Noches</span></div></div>
+                            </div>
 
-                        ${videoLink ? `<div style="text-align: center; margin-bottom: 20px;"><a href="${videoLink}" target="_blank" class="pdf-link" style="background: #ff0000; color: white; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; display: inline-block;">🎬 Ver video del barco</a></div>` : ''}
+                            ${videoLink ? `<div style="text-align: center; margin-bottom: 20px;"><a href="${videoLink}" target="_blank" class="pdf-link" style="background: #ff0000; color: white; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; display: inline-block;">🎬 Ver video del barco</a></div>` : ''}
 
-                        ${mapHTML}
-                        <div class="photo-gallery">${galleryHTML}</div>
-                        
-                        ${itineraryHTML ? `<div style="margin: 25px 0;">
-                            <strong style="color: var(--c-dark-blue); display: block; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">📍 ITINERARIO DEL VIAJE:</strong>
-                            ${itineraryHTML}
-                        </div>` : ''}
+                            ${mapHTML}
+                            <div class="photo-gallery">${galleryHTML}</div>
+                            
+                            ${itineraryHTML ? `<div style="margin: 25px 0;">
+                                <strong style="color: var(--c-dark-blue); display: block; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">📍 ITINERARIO DEL VIAJE:</strong>
+                                ${itineraryHTML}
+                            </div>` : ''}
 
-                        <div style="margin-top: 30px;">
-                            <h4 style="color: var(--c-brand-primary); margin-bottom: 15px; border-bottom: 2px solid var(--c-brand-primary); display: inline-block;">Opciones de Cabina Disponibles</h4>
-                            ${cabinsHTML}
+                            <div style="margin-top: 30px;">
+                                <h4 style="color: var(--c-brand-primary); margin-bottom: 15px; border-bottom: 2px solid var(--c-brand-primary); display: inline-block;">Opciones de Cabina Disponibles</h4>
+                                ${cabinsHTML}
+                            </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
+            }
         });
 
         // 3. RENDERIZAR VUELOS
@@ -905,18 +935,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 return '';
             }).join('');
             
-            confirmationComponentsContainer.innerHTML += `
-                <div class="component-section">
-                    <div class="option-header"><h3>Vuelos Sugeridos</h3></div>
-                    <div class="option-body">
-                        ${pastedImages['flight-banner-preview'] ? `<div class="flight-banner" style="text-align: center; margin-bottom: 15px;"><img src="${pastedImages['flight-banner-preview']}" style="width: 100%; max-width: 780px; height: 360px; object-fit: cover; border-radius: 12px;"></div>` : ''}
-                        <div id="flight-options-confirm-container">
-                            <div class="data-item" style="margin-bottom: 15px;">${ICONS.plane}<div class="data-item-content"><strong>Desde:</strong><p>${departureCity}</p></div></div>
-                            ${optionsHTML}
+            if(confirmationComponentsContainer) {
+                confirmationComponentsContainer.innerHTML += `
+                    <div class="component-section">
+                        <div class="option-header"><h3>Vuelos Sugeridos</h3></div>
+                        <div class="option-body">
+                            ${pastedImages['flight-banner-preview'] ? `<div class="flight-banner" style="text-align: center; margin-bottom: 15px;"><img src="${pastedImages['flight-banner-preview']}" style="width: 100%; max-width: 780px; height: 360px; object-fit: cover; border-radius: 12px;"></div>` : ''}
+                            <div id="flight-options-confirm-container">
+                                <div class="data-item" style="margin-bottom: 15px;">${ICONS.plane}<div class="data-item-content"><strong>Desde:</strong><p>${departureCity}</p></div></div>
+                                ${optionsHTML}
+                            </div>
+                            <p style="font-size: 11px; color: var(--c-gray); margin-top: 10px;">*Valores por persona, sujetos a cambio.</p>
                         </div>
-                        <p style="font-size: 11px; color: var(--c-gray); margin-top: 10px;">*Valores por persona, sujetos a cambio.</p>
-                    </div>
-                </div>`;
+                    </div>`;
+            }
         }
 
         // 4. RENDERIZAR TOURS
@@ -938,14 +970,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return '';
             }).join('');
 
-            confirmationComponentsContainer.innerHTML += `
-                <div class="component-section">
-                    <div class="option-header"><h3>Tours Opcionales</h3></div>
-                    <div class="option-body">
-                        <div class="photo-gallery">${galleryHTML}</div>
-                        ${optionsHTML}
-                    </div>
-                </div>`;
+            if(confirmationComponentsContainer) {
+                confirmationComponentsContainer.innerHTML += `
+                    <div class="component-section">
+                        <div class="option-header"><h3>Tours Opcionales</h3></div>
+                        <div class="option-body">
+                            <div class="photo-gallery">${galleryHTML}</div>
+                            ${optionsHTML}
+                        </div>
+                    </div>`;
+            }
         }
 
         // 5. RENDERIZAR TRASLADOS
@@ -964,13 +998,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 return '';
             }).join('');
 
-            confirmationComponentsContainer.innerHTML += `
-                <div class="component-section">
-                    <div class="option-header"><h3>Traslados</h3></div>
-                    <div class="option-body">
-                        ${optionsHTML}
-                    </div>
-                </div>`;
+            if(confirmationComponentsContainer) {
+                confirmationComponentsContainer.innerHTML += `
+                    <div class="component-section">
+                        <div class="option-header"><h3>Traslados</h3></div>
+                        <div class="option-body">
+                            ${optionsHTML}
+                        </div>
+                    </div>`;
+            }
         }
 
         // INYECCIÓN DE LA BARRA DE PAGOS (SOLO GRUPOS)
@@ -999,7 +1035,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const termsContentEl = document.getElementById('confirm-terms-content');
         if(termsContentEl) {
             termsContentEl.innerHTML = dynamicTermsHTML + GENERAL_TERMS;
-            document.getElementById('terms-section-confirm').style.display = 'block';
+            const termsSection = document.getElementById('terms-section-confirm');
+            if(termsSection) termsSection.style.display = 'block';
+        }
+
+        // FIX: ARREGLO DEL ENCABEZADO DEL PDF
+        const elementToPrint = document.getElementById('voucher-to-print');
+        if (elementToPrint) {
+            const headerEl = elementToPrint.querySelector('.confirmation-header');
+            if (headerEl) {
+                headerEl.style.padding = '30px 20px';
+                headerEl.style.backgroundColor = 'var(--c-brand-primary)';
+                headerEl.style.borderRadius = '24px 24px 0 0';
+                headerEl.style.display = 'flex';
+                headerEl.style.justifyContent = 'center';
+                headerEl.style.alignItems = 'center';
+                headerEl.innerHTML = `<img src="https://i.imgur.com/Rnc6C2t.png" alt="Suroeste Travel" style="max-width: 250px; height: auto; display: block;">`;
+            }
         }
 
         // Asignar links de WhatsApp a los botones finales
@@ -1012,18 +1064,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.getElementById('edit-quote-btn').addEventListener('click', () => showView('form'));
-    document.getElementById('new-quote-btn').addEventListener('click', () => loadDashboard());
+    const editBtn = document.getElementById('edit-quote-btn');
+    if(editBtn) editBtn.addEventListener('click', () => showView('form'));
     
-    // REEMPLAZA TODO EL EVENTO process-quote-btn AL FINAL DE script.js
+    const newBtn = document.getElementById('new-quote-btn');
+    if(newBtn) newBtn.addEventListener('click', () => loadDashboard());
+    
+    // FIX: ARREGLO DEL PDF CORTADO
     const processBtn = document.getElementById('process-quote-btn');
     if (processBtn) {
         processBtn.addEventListener('click', async () => {
-            document.getElementById('loader-overlay').style.display = 'flex';
-            document.getElementById('loader-text').textContent = "Generando PDF...";
+            const loader = document.getElementById('loader-overlay');
+            const loaderText = document.getElementById('loader-text');
+            if(loader) loader.style.display = 'flex';
+            if(loaderText) loaderText.textContent = "Generando PDF...";
             
             try {
                 const elementToPrint = document.getElementById('voucher-to-print');
+                if(!elementToPrint) throw new Error("No se encontró el elemento a imprimir");
+
                 const wrapperEl = document.querySelector('.wrapper');
                 
                 // FIX: Quitar overflow temporalmente para que html2canvas no recorte el PDF
@@ -1046,8 +1105,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     scale: 2, 
                     useCORS: true,
                     allowTaint: false,
-                    scrollY: 0, // Forzar renderizado desde arriba
-                    windowHeight: elementToPrint.scrollHeight // Capturar toda la altura real
+                    scrollY: 0, 
+                    windowHeight: elementToPrint.scrollHeight 
                 });
                 
                 // Restaurar overflow original
@@ -1073,66 +1132,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     );
                 });
 
-                pdf.save(`${document.getElementById('cotizacion-numero').value}.pdf`);
+                const cotNum = document.getElementById('cotizacion-numero')?.value || 'Cotizacion';
+                pdf.save(`${cotNum}.pdf`);
             } catch (error) { 
                 console.error("Error generando PDF:", error);
                 alert("Error generando PDF. Revisa la consola para más detalles."); 
             } finally { 
-                document.getElementById('loader-overlay').style.display = 'none'; 
+                const loader = document.getElementById('loader-overlay');
+                if(loader) loader.style.display = 'none'; 
             }
         });
     }
-        document.getElementById('loader-overlay').style.display = 'flex';
-        document.getElementById('loader-text').textContent = "Generando PDF...";
-        
-        try {
-            const elementToPrint = document.getElementById('voucher-to-print');
-            if (elementToPrint) {
-                const headerEl = elementToPrint.querySelector('.confirmation-header');
-                if (headerEl) {
-                    headerEl.style.padding = '30px 20px';
-                    headerEl.style.backgroundColor = 'var(--c-brand-primary)';
-                    headerEl.style.borderRadius = '24px 24px 0 0';
-                    headerEl.style.display = 'flex';
-                    headerEl.style.justifyContent = 'center';
-                    headerEl.style.alignItems = 'center';
-                    headerEl.innerHTML = `<img src="https://i.imgur.com/Rnc6C2t.png" alt="Suroeste Travel" style="max-width: 250px; height: auto; display: block;">`;
-                }
-            }
-
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            const canvas = await html2canvas(elementToPrint, { 
-                scale: 2, 
-                useCORS: true,
-                allowTaint: false 
-            });
-            
-            const pdf = new window.jspdf.jsPDF({ orientation: 'p', unit: 'px', format:[canvas.width, canvas.height] });
-            pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, canvas.width, canvas.height);
-            
-            const scaleFactor = canvas.width / elementToPrint.offsetWidth;
-            
-            const pdfLinks = elementToPrint.querySelectorAll('.pdf-link');
-            pdfLinks.forEach(element => {
-                if (!element.href) return;
-                const rect = element.getBoundingClientRect();
-                const containerRect = elementToPrint.getBoundingClientRect();
-                pdf.link(
-                    (rect.left - containerRect.left) * scaleFactor,
-                    (rect.top - containerRect.top) * scaleFactor,
-                    rect.width * scaleFactor,
-                    rect.height * scaleFactor,
-                    { url: element.href }
-                );
-            });
-
-            pdf.save(`${document.getElementById('cotizacion-numero').value}.pdf`);
-        } catch (error) { 
-            console.error("Error generando PDF:", error);
-            alert("Error generando PDF. Revisa la consola para más detalles."); 
-        } finally { 
-            document.getElementById('loader-overlay').style.display = 'none'; 
-        }
-    });
 });
